@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>React Authentication System</title>
+
+  <!-- React -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+    }
+    .box {
+      max-width: 400px;
+      margin: 80px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 6px;
+      text-align: center;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    button {
+      background: #0d6efd;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="root"></div>
+
+<script>
+  // 🔥 FIREBASE CONFIG (ALREADY FILLED)
+  const firebaseConfig = {
+    apiKey: "AIzaSyBuUoeQFyoYbSdwwYK6XQRn-riWy3t5K6M",
+    authDomain: "react-auth-system-f429f.firebaseapp.com",
+    projectId: "react-auth-system-f429f",
+    storageBucket: "react-auth-system-f429f.firebasestorage.app",
+    messagingSenderId: "167729776360",
+    appId: "1:167729776360:web:16527349238d15f70f2b5d"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  const e = React.createElement;
+
+  function App() {
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [user, setUser] = React.useState("");
+
+    function signup() {
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(res => setUser(res.user.email))
+        .catch(err => alert(err.message));
+    }
+
+    function login() {
+      auth.signInWithEmailAndPassword(email, password)
+        .then(res => setUser(res.user.email))
+        .catch(err => alert(err.message));
+    }
+
+    return e(
+      "div",
+      { className: "box" },
+      e("h2", null, "React Authentication System"),
+      e("input", {
+        type: "email",
+        placeholder: "Email",
+        onChange: ev => setEmail(ev.target.value)
+      }),
+      e("input", {
+        type: "password",
+        placeholder: "Password",
+        onChange: ev => setPassword(ev.target.value)
+      }),
+      e("button", { onClick: signup }, "Sign Up"),
+      e("button", { onClick: login }, "Login"),
+      user && e("p", null, "Logged in as: " + user)
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(e(App));
+</script>
+
+</body>
+</html>
